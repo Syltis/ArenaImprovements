@@ -26,20 +26,33 @@ namespace ArenaImprovements.Patches
                 for (int i = 0; i <= 3; i++)
                 {
                     EquipmentElement equipmentFromSlot = list[index].GetEquipmentFromSlot((EquipmentIndex)i);
-
-                    if (!ArenaConfig.MeleeOnly)
+                    
+                    if (ArenaConfig.SelectedWeaponType.WeaponType is ArenaWeaponTypesEnum.All)
                     {
                         equipment.AddEquipmentToSlotWithoutAgent((EquipmentIndex)i, equipmentFromSlot);
                         continue;
                     }
+                    
+                    if (equipmentFromSlot.Item is null) 
+                        continue;
 
-                    if (equipmentFromSlot.Item != null
-                        && !equipmentFromSlot.Item.ItemCategory.StringId.Contains("ranged_weapon")
-                        && !equipmentFromSlot.Item.ItemCategory.StringId.Contains("arrows")
-                        && !equipmentFromSlot.Item.ItemCategory.StringId.Contains("arrows"))
+                    var item = equipmentFromSlot.Item;
+
+                    if (ArenaConfig.SelectedWeaponType.WeaponType is ArenaWeaponTypesEnum.RangedOnly)
+                    {
+                        if (item.PrimaryWeapon.IsRangedWeapon)
+                            equipment.AddEquipmentToSlotWithoutAgent((EquipmentIndex)i, equipmentFromSlot);
+                        else if (item.PrimaryWeapon.IsAmmo)
                         {
                             equipment.AddEquipmentToSlotWithoutAgent((EquipmentIndex)i, equipmentFromSlot);
+                            equipment.AddEquipmentToSlotWithoutAgent((EquipmentIndex)i, equipmentFromSlot);
                         }
+                    }
+                    else if (ArenaConfig.SelectedWeaponType.WeaponType is ArenaWeaponTypesEnum.MeleeOnly)
+                    {
+                        if (item.PrimaryWeapon.IsMeleeWeapon)
+                            equipment.AddEquipmentToSlotWithoutAgent((EquipmentIndex)i, equipmentFromSlot);
+                    }
                 }
                 return false;
             }

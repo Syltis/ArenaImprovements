@@ -12,7 +12,7 @@ namespace ArenaImprovements
         public override void OnGameInitializationFinished(Game game)
         {
             base.OnGameInitializationFinished(game);
-            InformationManager.DisplayMessage(new InformationMessage("ArenaImprovements by Dahl loaded", Color.ConvertStringToColor("#CC9900")));
+            InformationManager.DisplayMessage(new InformationMessage("ArenaImprovements by Dahl loaded", Color.White));
         }
         protected override void OnSubModuleLoad()
         {

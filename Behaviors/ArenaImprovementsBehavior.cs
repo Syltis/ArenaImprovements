@@ -1,8 +1,4 @@
-﻿using SandBox.CampaignBehaviors;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using TaleWorlds.CampaignSystem.Conversation;
+﻿using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Library;
 
@@ -34,7 +30,7 @@ namespace ArenaImprovements.Behaviors
                 persuasionOptionDelegate: null);
 
             starter.AddDialogLine(
-                "arena_master_ask_for_melee_practice_type_response",
+                "arena_master_ask_for_melee_practice_type",
                 "arena_master_ask_for_melee_practice_type_response",
                 "arena_master_talk",
                 "{=arena_master_32}That is ok.",
@@ -48,9 +44,8 @@ namespace ArenaImprovements.Behaviors
 
         public static void conversation_arena_set_melee_fight_type_on_consequence()
         {
-            ArenaConfig.MeleeOnly = !ArenaConfig.MeleeOnly;
-            InformationManager.DisplayMessage(new InformationMessage($"Weapontype set to {(ArenaConfig.MeleeOnly ? "melee" : "all weapons")}", Color.ConvertStringToColor("#CC9900")));
-
+            ArenaConfig.NextWeaponType();
+            InformationManager.DisplayMessage(new InformationMessage($"Weapontype set to {ArenaConfig.SelectedWeaponType.Name}", Color.White));
         }
     }
 }
