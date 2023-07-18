@@ -1,14 +1,10 @@
 ﻿using HarmonyLib;
 using SandBox.Missions.MissionLogics.Arena;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using System.Linq;
-using TaleWorlds.MountAndBlade;
-using TaleWorlds.Library;
 
 namespace ArenaImprovements.Patches
 {
@@ -46,19 +42,6 @@ namespace ArenaImprovements.Patches
                         }
                 }
                 return false;
-            }
-            return true;
-        }
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(ArenaPracticeFightMissionController), "OnMissionTick")]
-        private static bool OnMissionTick(ArenaPracticeFightMissionController __instance, BasicMissionTimer ____teleportTimer, float dt)
-        {
-            if (____teleportTimer != null && ____teleportTimer.ElapsedTime > __instance.TeleportTime)
-            {
-                ArenaConfig.MeleeOnly = false;
-                InformationManager.DisplayMessage(new InformationMessage($"MeleeOnly set to False {DateTime.Now:HH:mm}", Color.ConvertStringToColor("#FF0042FF")));
-
             }
             return true;
         }
