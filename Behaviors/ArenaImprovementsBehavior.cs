@@ -1,6 +1,7 @@
 ﻿using TaleWorlds.CampaignSystem.Conversation;
 using TaleWorlds.CampaignSystem;
-using TaleWorlds.Library;
+using TaleWorlds.Localization;
+using System;
 
 namespace ArenaImprovements.Behaviors
 {
@@ -33,19 +34,36 @@ namespace ArenaImprovements.Behaviors
                 "arena_master_ask_for_melee_practice_type",
                 "arena_master_ask_for_melee_practice_type_response",
                 "arena_master_talk",
-                "{=arena_master_32}That is ok.",
+                "{=arena_master_31}{NEARBY_TOURNAMENT_STRING}",
+                new ConversationSentence.OnConditionDelegate(conversation_tournament_soon_on_condition),
                 null,
-                null,
-                1,
+                100,
                 null);
         }
 
         public override void SyncData(IDataStore dataStore) { }
 
-        public static void conversation_arena_set_melee_fight_type_on_consequence()
+        public static void conversation_arena_set_melee_fight_type_on_consequence() => ArenaConfig.NextWeaponType();
+        
+        public static bool conversation_tournament_soon_on_condition()
         {
-            ArenaConfig.NextWeaponType();
-            InformationManager.DisplayMessage(new InformationMessage($"Weapontype set to {ArenaConfig.SelectedWeaponType.Name}", Color.White));
+            string text = string.Empty;
+            switch (ArenaConfig.SelectedWeaponType.WeaponType)
+            {
+                case ArenaWeaponTypesEnum.All:
+                    text = "Ok, let the guys downstairs know you'll enter a fight using all available weapons.";
+                    break;
+                case ArenaWeaponTypesEnum.MeleeOnly:
+                    text = "Ok, let the guys downstairs know you'll enter a fight using melee only weapons.";
+                    break;
+                case ArenaWeaponTypesEnum.RangedOnly:
+                    text = "Ok, let the guys downstairs know you'll enter a fight using ranged only weapons.";
+                    break;
+                default:
+                    throw new InvalidOperationException("Missing switch path for weapontype.");
+            }
+            MBTextManager.SetTextVariable("NEARBY_TOURNAMENT_STRING", text, false);
+            return true;
         }
     }
 }
